@@ -16,7 +16,7 @@ from setuptools import setup
 
 setup(
     name='Flask-OpenID',
-    version='0.9',
+    version='0.9.1',
     url='http://github.com/mitsuhiko/flask-openid/',
     license='BSD',
     author='Armin Ronacher',
