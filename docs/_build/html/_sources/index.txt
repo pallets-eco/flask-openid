@@ -224,6 +224,11 @@ The full API reference:
 .. autoclass:: OpenIDResponse
    :members:
 
+.. data:: COMMON_PROVIDERS
+
+   a dictionary of common provider name -> login URL mappings.  This can
+   be used to implement "click button to login" functionality.
+
 .. _Flask: http://flask.pocoo.org/
 .. _OpenID: http://openid.net/
 .. _python-openid: http://openidenabled.com/python-openid/
