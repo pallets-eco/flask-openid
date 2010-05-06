@@ -229,6 +229,9 @@ The full API reference:
    a dictionary of common provider name -> login URL mappings.  This can
    be used to implement "click button to login" functionality.
 
+   Currently contains general purpose entrypoints for the following
+   providers: ``google``, ``yahoo``, ``aol``, and ``steam``.
+
 .. _Flask: http://flask.pocoo.org/
 .. _OpenID: http://openid.net/
 .. _python-openid: http://openidenabled.com/python-openid/

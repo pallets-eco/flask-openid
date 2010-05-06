@@ -101,6 +101,14 @@ div.body h6 {
     margin: 30px 0px 10px 0px;
     padding: 0;
 }
+
+{% if theme_index_logo %}
+div.indexwrapper h1 {
+    text-indent: -999999px;
+    background: url({{ theme_index_logo }}) no-repeat center center;
+    height: {{ theme_index_height or '120px' }};
+}
+{% endif %}
  
 div.body h2 { font-size: 180%; }
 div.body h3 { font-size: 150%; }

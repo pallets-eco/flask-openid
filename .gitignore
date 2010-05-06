@@ -3,4 +3,5 @@
 *.pyo
 env
 dist
+docs/_build
 *.egg-info

@@ -83,12 +83,17 @@ FULL_DOB_URIS = ['http://axschema.org/birthDate',
                  'http://schema.openid.net/birthDate']
 SREG_KEYS = set(['nickname', 'email', 'fullname', 'dob', 'gender',
                  'postcode', 'country', 'language', 'timezone'])
+# these are required if provided, otherwise google will not return
+# the information for the application.
+REQUIRED_KEYS = set(['country', 'email', 'fullname', 'language'])
 ALL_KEYS = set(AX_MAPPING) | SREG_KEYS
 
 
 COMMON_PROVIDERS = {
     'google':       'https://www.google.com/accounts/o8/id',
-    'yahoo':        'https://yahoo.com/'
+    'yahoo':        'https://yahoo.com/',
+    'aol':          'http://aol.com/',
+    'steam':        'https://steamcommunity.com/openid/'
 }
 
 
@@ -119,8 +124,8 @@ class RegLookup(object):
 
     def get_uri(self, uri):
         try:
-            return self.ax_resp.get(uri)
-        except KeyError:
+            return self.ax_resp.get(uri)[0]
+        except (TypeError, IndexError, KeyError):
             return None
 
     def get_combined(self, sreg_key, ax_uris):
@@ -150,8 +155,7 @@ class OpenIDResponse(object):
         if self.fullname is None:
             first = lookup.get_uri('http://axschema.org/namePerson/first')
             last = lookup.get_uri(u'http://axschema.org/namePerson/last')
-            pieces = filter(None, [first, last])
-            self.fullname = u' '.join(pieces) or None
+            self.fullname = u' '.join(x for x in [first, last] if x) or None
 
         #: desired nickname of the user
         self.nickname = lookup.get('nickname')
@@ -317,7 +321,7 @@ class OpenID(object):
         ax_req = ax.FetchRequest()
         for key in keys:
             for uri in AX_MAPPING.get(key, ()):
-                ax_req.add(ax.AttrInfo(uri))
+                ax_req.add(ax.AttrInfo(uri, required=key in REQUIRED_KEYS))
         auth_request.addExtension(ax_req)
 
     def errorhandler(f):
