@@ -18,22 +18,19 @@ from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-# configuration
-DATABASE_URI = 'sqlite:////tmp/flask-openid.db'
-OPENID_FS_PATH = '/tmp/flask-openid-store'
-SECRET_KEY = 'development key'
-DEBUG = True
-
 # setup flask
 app = Flask(__name__)
-app.debug = DEBUG
-app.secret_key = SECRET_KEY
+app.config.update(
+    DATABASE_URI = 'sqlite:////tmp/flask-openid.db',
+    SECRET_KEY = 'development key',
+    DEBUG = True
+)
 
 # setup flask-openid
-oid = OpenID(OPENID_FS_PATH)
+oid = OpenID(app)
 
 # setup sqlalchemy
-engine = create_engine(DATABASE_URI)
+engine = create_engine(app.config['DATABASE_URI'])
 db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=engine))
@@ -62,6 +59,12 @@ def before_request():
     g.user = None
     if 'openid' in session:
         g.user = User.query.filter_by(openid=session['openid']).first()
+
+
+@app.after_request
+def after_request(response):
+    db_session.remove()
+    return response
 
 
 @app.route('/')

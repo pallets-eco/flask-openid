@@ -248,10 +248,28 @@ class OpenID(object):
     """Simple helper class for OpenID auth.  Has to be created in advance
     like a :class:`~flask.Flask` object.
 
+    There are two usage modes which work very similar.  One is binding
+    the instance to a very specific Flask application::
+
+        app = Flask(__name__)
+        db = OpenID(app)
+
+    The second possibility is to create the object once and configure the
+    application later to support it::
+
+        oid = OpenID()
+
+        def create_app():
+            app = Flask(__name__)
+            oid.init_app(app)
+            return app
+
+    :param app: the application to register this openid controller with.
     :param fs_store_path: if given this is the name of a folder where the
                           OpenID auth process can store temporary
                           information.  If neither is provided a temporary
-                          folder is assumed.
+                          folder is assumed.  This is overridden by the
+                          ``OPENID_FS_STORE_PATH`` configuration key.
     :param store_factory: alternatively a function that creates a
                           python-openid store object.
     :param fallback_endpoint: optionally a string with the name of an URL
@@ -261,19 +279,55 @@ class OpenID(object):
                               application's index in that case.
     """
 
-    # XXX: GAE support
-
-    def __init__(self, fs_store_path=None, store_factory=None,
+    def __init__(self, app=None, fs_store_path=None, store_factory=None,
                  fallback_endpoint=None):
+        # backwards compatibility support
+        if isinstance(app, basestring):
+            from warnings import warn
+            warn(DeprecationWarning('OpenID constructor expects application '
+                                    'as first argument now.  If you want to '
+                                    'provide a hardcoded fs_store_path you '
+                                    'have to use a keyword argument.  It is '
+                                    'recommended though to use the config '
+                                    'key.'), stacklevel=2)
+            fs_store_path = app
+            app = None
+
+        self.app = app
+        if app is not None:
+            self.init_app(app)
+
         self.fs_store_path = fs_store_path
         if store_factory is None:
-            if self.fs_store_path is None:
-                self.fs_store_path = os.path.join(tempfile.gettempdir(),
-                                                  'flask-openid')
-            store_factory = lambda: FileOpenIDStore(self.fs_store_path)
+            store_factory = self._default_store_factory
         self.store_factory = store_factory
         self.after_login_func = None
         self.fallback_endpoint = fallback_endpoint
+
+    def init_app(self, app):
+        """This callback can be used to initialize an application for the
+        use with this openid controller.
+
+        .. versionadded:: 1.0
+        """
+        app.config.setdefault('OPENID_FS_STORE_PATH', None)
+
+    def _default_store_factory(self):
+        """Default store factory that creates a filesystem store from
+        the configuration.
+        """
+        app = self.app if self.app is not None else current_app
+
+        if 'OPENID_FS_STORE_PATH' not in app.config:
+            self.init_app(app)
+            from warnings import warn
+            warn(DeprecationWarning('init_app not called for this '
+                'application.  This is deprecated functionality'))
+
+        path = app.config['OPENID_FS_STORE_PATH'] or self.fs_store_path
+        if path is None:
+            path = os.path.join(tempfile.gettempdir(), 'flask-openid')
+        return FileOpenIDStore(path)
 
     def signal_error(self, msg):
         """Signals an error.  It does this by storing the message in the

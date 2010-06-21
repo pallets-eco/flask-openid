@@ -35,12 +35,19 @@ To integrate Flask-OpenID into your application you need to create an
 instance of the :class:`OpenID` object first::
 
     from flaskext.openid import OpenID
-    oid = OpenID('/path/to/store')
+    oid = OpenID(app, '/path/to/store')
 
 By default it will use the filesystem as store for information needed by
 OpenID for the authentication process.  You can alternatively implement
 your own store that uses the database or a no-sql server.  For more
 information about that, consult the python-openid documentation.
+
+The path to the store can also be specified with the
+``OPENID_FS_STORE_PATH`` configuration variable.
+
+Alternatively the object can be instanciated without the application in
+which case it can later be registered for an application with the
+:meth:`~OpenID.init_app` method.
 
 The current logged in user has to memorized somewhere, we will use the
 ``'openid'`` key in the `session`.  This can be implemented in a
@@ -212,6 +219,16 @@ Full Example
 
 To see the full code of that example, you can download the code `from
 github <http://github.com/mitsuhiko/flask-openid>`_.
+
+Changes
+-------
+
+1.0
+```
+
+-   the OpenID object is not registered to an application which allows
+    configuration values to be used and is also consistent with other
+    Flask extensions.
 
 API References
 --------------
