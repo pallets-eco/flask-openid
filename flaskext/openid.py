@@ -214,34 +214,34 @@ class OpenIDResponse(object):
                 'http://axschema.org/birthDate/birthMonth'))
 
         #: phone number of the user as string
-        phone = lookup.get('phone')
+        self.phone = lookup.get('phone')
 
         #: AIM messenger address as string
-        aim = lookup.get('aim')
+        self.aim = lookup.get('aim')
 
         #: icq messenger number as string
-        icq = lookup.get('icq')
+        self.icq = lookup.get('icq')
 
         #: msn name as string
-        msn = lookup.get('msn')
+        self.msn = lookup.get('msn')
 
         #: yahoo messenger address as string
-        yahoo = lookup.get('yahoo')
+        self.yahoo = lookup.get('yahoo')
 
         #: jabber address as string
-        jabber = lookup.get('jabber')
+        self.jabber = lookup.get('jabber')
 
         #: skype name as string
-        skype = lookup.get('skype')
+        self.skype = lookup.get('skype')
 
         #: URL of website as string
-        website = lookup.get('website')
+        self.website = lookup.get('website')
 
         #: URL of blog as string
-        blog = lookup.get('blog')
+        self.blog = lookup.get('blog')
 
         #: URL to profile image as string
-        image = lookup.get('image')
+        self.image = lookup.get('image')
 
 
 class OpenID(object):
