@@ -3,9 +3,9 @@
     OpenID Example
     ~~~~~~~~~~~~~~
 
-    This simple application shows how OpenID can be used in an application.
+    This simple application shows how to integrate OpenID in your application.
 
-    This Dependencs on SQLAlchemy.
+    This example requires SQLAlchemy as a dependency.
 
     :copyright: (c) 2010 by Armin Ronacher.
     :license: BSD, see LICENSE for more details.
@@ -161,7 +161,7 @@ def edit_profile():
 @app.route('/logout')
 def logout():
     session.pop('openid', None)
-    flash(u'You were signed out')
+    flash(u'You have been signed out')
     return redirect(oid.get_next_url())
 
 
