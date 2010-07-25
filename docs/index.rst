@@ -59,6 +59,7 @@ The current logged in user has to memorized somewhere, we will use the
     def lookup_current_user():
         g.user = None
         if 'openid' in session:
+            openid = session['openid']
             g.user = User.query.filter_by(openid=openid).first()
 
 This assumes the openid used for a user is stored in the user table
