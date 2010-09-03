@@ -173,7 +173,7 @@ A typical page to create such a profile might look like this::
                 db_session.add(User(name, email, session['openid']))
                 db_session.commit()
                 return redirect(oid.get_next_url())
-        return render_template('create_profile.html', next_url=oid.get_next_url())
+        return render_template('create_profile.html', next=oid.get_next_url())
 
 If you're using the same names for the URL parameters in the step before
 and in this form, you have nice looking and simple templates:
