@@ -121,7 +121,7 @@ Responding to Successful Logins
 -------------------------------
 
 Next we have to define a function that is called after the login was
-successful.  The resonsibility of that function is to remember the user
+successful.  The responsibility of that function is to remember the user
 that just logged in and to figure out if it's a new user to the system or
 one with an existing profile (if you want to use profiles).
 
