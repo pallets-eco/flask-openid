@@ -378,8 +378,8 @@ class OpenID(object):
                 ax_req.add(ax.AttrInfo(uri, required=key in REQUIRED_KEYS))
         auth_request.addExtension(ax_req)
 
-    def errorhandler(f):
-        """Called if an error occours with the message.  By default
+    def errorhandler(self, f):
+        """Called if an error occurs with the message.  By default
         ``'openid_error'`` is added to the session so that :meth:`fetch_error`
         can fetch that error from the session.  Alternatively it makes sense
         to directly flash the error for example::
