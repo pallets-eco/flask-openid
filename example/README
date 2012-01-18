@@ -1,0 +1,8 @@
+This folder contains a very basic example for OpenID integration.
+Remeber you need to create the database first:
+
+$ python
+>>> import example
+>>> example.init_db()
+
+Before running the project.
