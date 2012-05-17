@@ -421,7 +421,7 @@ class OpenID(object):
             return redirect(self.get_current_url())
         return decorated
 
-    def try_login(self, identity_url, ask_for=None):
+    def try_login(self, identity_url, ask_for=None, extension_args=None):
         """This tries to login with the given identity URL.  This function
         must be called from the login_handler.  The `ask_for` parameter can
         be a set of values to be asked from the openid provider.
@@ -441,6 +441,9 @@ class OpenID(object):
             auth_request = consumer.begin(identity_url)
             if ask_for:
                 self.attach_reg_info(auth_request, ask_for)
+            if extension_args:
+                for namespace, key, value in extension_args:
+                    auth_request.addExtensionArg(namespace, key, value)
         except discover.DiscoveryFailure:
             self.signal_error(u'The OpenID was invalid')
             return redirect(self.get_current_url())
