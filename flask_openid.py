@@ -13,6 +13,7 @@
 from __future__ import absolute_import
 
 import os
+import pickle
 import tempfile
 from functools import wraps
 from datetime import date
@@ -99,6 +100,43 @@ def softint(x):
         return int(x)
     except (ValueError, TypeError):
         return None
+
+
+class SessionWrapper(object):
+    name_mapping = {
+        '_yadis_services__openid_consumer_':    'yoc',
+        '_openid_consumer_last_token':          'lt'
+    }
+
+    def __init__(self, ext):
+        self.ext = ext
+
+    def __getitem__(self, name):
+        rv = session[self.name_mapping.get(name, name)]
+        if isinstance(rv, dict) and len(rv) == 1 and ' p' in rv:
+            return pickle.loads(rv[' p'])
+        return rv
+
+    def __setitem__(self, name, value):
+        if not getattr(current_app.session_interface, 'pickle_based', True):
+            value = {' p': pickle.dumps(value, 0)}
+        session[self.name_mapping.get(name, name)] = value
+
+    def __delitem__(self, name):
+        del session[self.name_mapping.get(name, name)]
+
+    def get(self, name, default=None):
+        try:
+            return self[name]
+        except KeyError:
+            return default
+
+    def __contains__(self, name):
+        try:
+            self[name]
+            return True
+        except KeyError:
+            return False
 
 
 class RegLookup(object):
@@ -406,7 +444,7 @@ class OpenID(object):
         def decorated(*args, **kwargs):
             if request.args.get('openid_complete') != u'yes':
                 return f(*args, **kwargs)
-            consumer = Consumer(session, self.store_factory())
+            consumer = Consumer(SessionWrapper(self), self.store_factory())
             openid_response = consumer.complete(request.args.to_dict(),
                                                 self.get_current_url())
             if openid_response.status == SUCCESS:
@@ -434,7 +472,7 @@ class OpenID(object):
                 if key not in ALL_KEYS:
                     raise ValueError('invalid key %r' % key)
         try:
-            consumer = Consumer(session, self.store_factory())
+            consumer = Consumer(SessionWrapper(self), self.store_factory())
             auth_request = consumer.begin(identity_url)
             if ask_for:
                 self.attach_reg_info(auth_request, ask_for)
