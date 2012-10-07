@@ -12,7 +12,7 @@
 """
 from flask import Flask, render_template, request, g, session, flash, \
      redirect, url_for, abort
-from flaskext.openid import OpenID
+from flask_openid import OpenID
 
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import scoped_session, sessionmaker
