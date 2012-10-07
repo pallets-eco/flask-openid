@@ -1,7 +1,7 @@
 Flask-OpenID
 ============
 
-.. module:: flaskext.openid
+.. module:: flask_openid
 
 Flask-OpenID is an extension to `Flask`_ that allows you to add `OpenID`_
 based authentication to your website in a matter of minutes.  It depends
@@ -34,7 +34,7 @@ How to Use
 To integrate Flask-OpenID into your application you need to create an
 instance of the :class:`OpenID` object first::
 
-    from flaskext.openid import OpenID
+    from flask_openid import OpenID
     oid = OpenID(app, '/path/to/store')
 
 By default it will use the filesystem as store for information needed by
