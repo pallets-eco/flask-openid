@@ -17,17 +17,14 @@ import tempfile
 from functools import wraps
 from datetime import date
 
-from flask import request, session, flash, redirect, current_app, url_for
+from flask import request, session, redirect, current_app, url_for
 from werkzeug import url_quote
 
-from openid.association import Association
-from openid.store.interface import OpenIDStore
 from openid.store.filestore import FileOpenIDStore
 from openid.extensions import ax
 from openid.extensions.sreg import SRegRequest, SRegResponse
 from openid.consumer.consumer import Consumer, SUCCESS, CANCEL
 from openid.consumer import discover
-from openid.store import nonce
 
 # python-openid is a really stupid library in that regard, we have
 # to disable logging by monkey patching.  We still call the original
