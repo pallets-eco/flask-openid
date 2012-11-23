@@ -114,7 +114,7 @@ class SessionWrapper(object):
     def __getitem__(self, name):
         rv = session[self.name_mapping.get(name, name)]
         if isinstance(rv, dict) and len(rv) == 1 and ' p' in rv:
-            return pickle.loads(rv[' p'])
+            return pickle.loads(rv[' p'].encode('utf-8'))
         return rv
 
     def __setitem__(self, name, value):
