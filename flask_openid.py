@@ -114,7 +114,7 @@ class SessionWrapper(object):
     def __getitem__(self, name):
         rv = session[self.name_mapping.get(name, name)]
         if isinstance(rv, dict) and len(rv) == 1 and ' p' in rv:
-            return pickle.loads(rv[' p'])
+            return pickle.loads(rv[' p'].encode('utf-8'))
         return rv
 
     def __setitem__(self, name, value):
@@ -399,14 +399,14 @@ class OpenID(object):
         """
         return self.get_current_url() + '&openid_complete=yes'
 
-    def attach_reg_info(self, auth_request, keys):
+    def attach_reg_info(self, auth_request, keys, nice_to_have):
         """Attaches sreg and ax requests to the auth request.
 
         :internal:
         """
         keys = set(keys)
         sreg_keys = list(SREG_KEYS & keys)
-        auth_request.addExtension(SRegRequest(required=sreg_keys))
+        auth_request.addExtension(SRegRequest(required=sreg_keys, optional=nice_to_have))
         ax_req = ax.FetchRequest()
         for key in keys:
             for uri in AX_MAPPING.get(key, ()):
@@ -456,7 +456,7 @@ class OpenID(object):
             return redirect(self.get_current_url())
         return decorated
 
-    def try_login(self, identity_url, ask_for=None):
+    def try_login(self, identity_url, ask_for=None, nice_to_have=None):
         """This tries to login with the given identity URL.  This function
         must be called from the login_handler.  The `ask_for` parameter can
         be a set of values to be asked from the openid provider.
@@ -474,8 +474,8 @@ class OpenID(object):
         try:
             consumer = Consumer(SessionWrapper(self), self.store_factory())
             auth_request = consumer.begin(identity_url)
-            if ask_for:
-                self.attach_reg_info(auth_request, ask_for)
+            if ask_for or nice_to_have:
+                self.attach_reg_info(auth_request, ask_for, nice_to_have)
         except discover.DiscoveryFailure:
             self.signal_error(u'The OpenID was invalid')
             return redirect(self.get_current_url())
