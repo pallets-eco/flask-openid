@@ -12,7 +12,18 @@ Links:
   <http://github.com/mitsuhiko/flask-openid/zipball/master#egg=Flask-OpenID-dev>`_
 """
 from setuptools import setup
+import sys
 
+if sys.version_info.major == 3:
+    install_requires=[
+        'Flask>=0.10.1',
+        'python3-openid>=3.0'
+    ]
+else:
+    install_requires=[
+        'Flask>=0.3',
+        'python-openid>=2.0'
+    ]
 
 setup(
     name='Flask-OpenID',
@@ -26,10 +37,7 @@ setup(
     py_modules=['flask_openid'],
     zip_safe=False,
     platforms='any',
-    install_requires=[
-        'Flask>=0.3',
-        'python-openid>=2.0'
-    ],
+    install_requires=install_requires,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
@@ -37,6 +45,7 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 3',	
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Python Modules'
     ]
