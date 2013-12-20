@@ -460,8 +460,9 @@ class OpenID(object):
             if request.args.get('openid_complete') != u'yes':
                 return f(*args, **kwargs)
             consumer = Consumer(SessionWrapper(self), self.store_factory())
-            openid_response = consumer.complete(request.args.to_dict(),
-                                                self.get_current_url())
+            args = request.args.to_dict()
+            args.update(request.form.to_dict())
+            openid_response = consumer.complete(args, self.get_current_url())
             if openid_response.status == SUCCESS:
                 return self.after_login_func(OpenIDResponse(
                     openid_response, self.extension_responses))
