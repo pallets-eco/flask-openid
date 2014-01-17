@@ -3,5 +3,6 @@
 *.pyo
 env
 dist
+build
 docs/_build
 *.egg-info
