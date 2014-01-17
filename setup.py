@@ -27,8 +27,8 @@ setup(
     zip_safe=False,
     platforms='any',
     install_requires=[
-        'Flask>=0.3',
-        'python-openid>=2.0'
+        'Flask>=0.10.1',
+        'python3-openid>=3.0'
     ],
     classifiers=[
         'Development Status :: 4 - Beta',

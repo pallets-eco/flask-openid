@@ -317,7 +317,7 @@ class OpenID(object):
     def __init__(self, app=None, fs_store_path=None, store_factory=None,
                  fallback_endpoint=None):
         # backwards compatibility support
-        if isinstance(app, basestring):
+        if isinstance(app, str):
             from warnings import warn
             warn(DeprecationWarning('OpenID constructor expects application '
                                     'as first argument now.  If you want to '
