@@ -79,8 +79,8 @@ standard view function that is additionally decorated as
         if request.method == 'POST':
             openid = request.form.get('openid')
             if openid:
-                return oid.try_login(openid, ask_for=['email', 'fullname',
-                                                      'nickname'])
+                return oid.try_login(openid, ask_for=['email', 'nickname'],
+                                             ask_for_optional=['fullname'])
         return render_template('login.html', next=oid.get_next_url(),
                                error=oid.fetch_error())
 
@@ -89,8 +89,9 @@ out if the user is already logged in.  In that case we return to where we
 just came from (:meth:`~OpenID.get_next_url` can do that for us).  When
 the data is submitted we get the openid the user entered and try to login
 with that information.  Additionally we ask the openid provider for email,
-nickname and the user's full name.  If that information is available, we
-can use it to simplify the account creation process in our application.
+nickname and the user's full name, where we declare full name as optional.
+If that information is available, we can use it to simplify the account
+creation process in our application.
 
 The template also needs the URL we want to return to, because it has to
 forward that information in the form.  If an error happened,

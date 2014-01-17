@@ -399,16 +399,18 @@ class OpenID(object):
         """
         return self.get_current_url() + '&openid_complete=yes'
 
-    def attach_reg_info(self, auth_request, keys):
+    def attach_reg_info(self, auth_request, keys, optional_keys):
         """Attaches sreg and ax requests to the auth request.
 
         :internal:
         """
-        keys = set(keys)
+        keys = set(keys or [])
+        optional_keys = set(optional_keys or [])
         sreg_keys = list(SREG_KEYS & keys)
-        auth_request.addExtension(SRegRequest(required=sreg_keys))
+        sreg_optional_keys = list(SREG_KEYS & optional_keys)
+        auth_request.addExtension(SRegRequest(required=sreg_keys, optional=sreg_optional_keys))
         ax_req = ax.FetchRequest()
-        for key in keys:
+        for key in (keys | optional_keys):
             for uri in AX_MAPPING.get(key, ()):
                 ax_req.add(ax.AttrInfo(uri, required=key in REQUIRED_KEYS))
         auth_request.addExtension(ax_req)
@@ -456,12 +458,15 @@ class OpenID(object):
             return redirect(self.get_current_url())
         return decorated
 
-    def try_login(self, identity_url, ask_for=None):
+    def try_login(self, identity_url, ask_for=None, ask_for_optional=None):
         """This tries to login with the given identity URL.  This function
-        must be called from the login_handler.  The `ask_for` parameter can
-        be a set of values to be asked from the openid provider.
+        must be called from the login_handler.  The `ask_for` and 
+        `ask_for_optional`parameter can be a set of values to be asked
+        from the openid provider, where keys in `ask_for` are marked as
+        required, and keys in `ask_for_optional` are marked as optional.
 
-        The following strings can be used in the `ask_for` parameter:
+        The following strings can be used in the `ask_for` and
+            `ask_for_optional` parameters:
         ``aim``, ``blog``, ``country``, ``dob`` (date of birth), ``email``,
         ``fullname``, ``gender``, ``icq``, ``image``, ``jabber``, ``language``,
         ``msn``, ``nickname``, ``phone``, ``postcode``, ``skype``,
@@ -471,11 +476,14 @@ class OpenID(object):
             for key in ask_for:
                 if key not in ALL_KEYS:
                     raise ValueError('invalid key %r' % key)
+            for key in ask_for_optional:
+                if key not in ALL_KEYS:
+                    raise ValueError('invalid optional key %r' % key)
         try:
             consumer = Consumer(SessionWrapper(self), self.store_factory())
             auth_request = consumer.begin(identity_url)
-            if ask_for:
-                self.attach_reg_info(auth_request, ask_for)
+            if ask_for or ask_for_optional:
+                self.attach_reg_info(auth_request, ask_for, ask_for_optional)
         except discover.DiscoveryFailure:
             self.signal_error(u'The OpenID was invalid')
             return redirect(self.get_current_url())

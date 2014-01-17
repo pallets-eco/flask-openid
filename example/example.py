@@ -84,8 +84,8 @@ def login():
     if request.method == 'POST':
         openid = request.form.get('openid')
         if openid:
-            return oid.try_login(openid, ask_for=['email', 'fullname',
-                                                  'nickname'])
+            return oid.try_login(openid, ask_for=['email', 'nickname'],
+                                         ask_for_optional=['fullname'])
     return render_template('login.html', next=oid.get_next_url(),
                            error=oid.fetch_error())
 
