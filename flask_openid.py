@@ -349,8 +349,7 @@ class OpenID(object):
         self.store_factory = store_factory
         self.after_login_func = None
         self.fallback_endpoint = fallback_endpoint
-        if extension_responses:
-            self.extension_responses = extension_responses
+        self.extension_responses = extension_responses
 
     def init_app(self, app):
         """This callback can be used to initialize an application for the

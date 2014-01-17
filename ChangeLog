@@ -6,6 +6,8 @@ New
 
 - Added support for python 3. [Dennis Glindhart, Patrick Uiterwijk]
 
+- Added support for python-openid extensions. [Pierre-Yves Chibon, Jeff Miller, Patrick Uiterwijk]
+
 - Added support for optional sreg keys. [Shay Erlichmen, Patrick Uiterwijk]
 
 
