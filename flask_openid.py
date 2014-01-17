@@ -141,10 +141,16 @@ class SessionWrapper(object):
 
 class RegLookup(object):
 
-    def __init__(self, resp):
+    def __init__(self, resp, extensions):
         sreg_resp = SRegResponse.fromSuccessResponse(resp)
         self.sreg = sreg_resp and sreg_resp.data or {}
         self.ax_resp = ax.FetchResponse.fromSuccessResponse(resp) or {}
+
+        # Process the OpenID response with the OpenIDResponse class provided
+        self.ext = {}
+        for extension in extensions:
+            self.ext[extension.__name__] = \
+                extension.fromSuccessResponse(resp)
 
     def get(self, name, default=None):
         assert name in ALL_KEYS, 'unknown key %r' % name
@@ -180,10 +186,10 @@ class OpenIDResponse(object):
     the :meth:`~OpenID.try_login` function.
     """
 
-    def __init__(self, resp):
+    def __init__(self, resp, extensions):
         #: the openid the user used for sign in
         self.identity_url = resp.identity_url
-        lookup = RegLookup(resp)
+        lookup = RegLookup(resp, extensions)
 
         #: the full name of the user
         self.fullname = lookup.get_combined('fullname', FULL_NAME_URIS)
@@ -278,6 +284,10 @@ class OpenIDResponse(object):
         #: URL to profile image as string
         self.image = lookup.get('image')
 
+        #: Hash of the response object from the OpenID Extension by the
+        # OpenID Extension class name
+        self.extensions = lookup.ext
+
 
 class OpenID(object):
     """Simple helper class for OpenID auth.  Has to be created in advance
@@ -312,10 +322,11 @@ class OpenID(object):
                               if the HTTP referrer is unreliable.  By
                               default the user is redirected back to the
                               application's index in that case.
+    :param extension_responses: a list of OpenID Extensions Response class.
     """
 
     def __init__(self, app=None, fs_store_path=None, store_factory=None,
-                 fallback_endpoint=None):
+                 fallback_endpoint=None, extension_responses=[]):
         # backwards compatibility support
         if isinstance(app, basestring):
             from warnings import warn
@@ -338,6 +349,8 @@ class OpenID(object):
         self.store_factory = store_factory
         self.after_login_func = None
         self.fallback_endpoint = fallback_endpoint
+        if extension_responses:
+            self.extension_responses = extension_responses
 
     def init_app(self, app):
         """This callback can be used to initialize an application for the
@@ -445,10 +458,12 @@ class OpenID(object):
             if request.args.get('openid_complete') != u'yes':
                 return f(*args, **kwargs)
             consumer = Consumer(SessionWrapper(self), self.store_factory())
-            openid_response = consumer.complete(request.args.to_dict(),
-                                                self.get_current_url())
+            args = request.args.to_dict()
+            args.update(request.form.to_dict())
+            openid_response = consumer.complete(args, self.get_current_url())
             if openid_response.status == SUCCESS:
-                return self.after_login_func(OpenIDResponse(openid_response))
+                return self.after_login_func(OpenIDResponse(
+                    openid_response, self.extension_responses))
             elif openid_response.status == CANCEL:
                 self.signal_error(u'The request was cancelled')
                 return redirect(self.get_current_url())
@@ -456,7 +471,7 @@ class OpenID(object):
             return redirect(self.get_current_url())
         return decorated
 
-    def try_login(self, identity_url, ask_for=None):
+    def try_login(self, identity_url, ask_for=None, extension_args=None):
         """This tries to login with the given identity URL.  This function
         must be called from the login_handler.  The `ask_for` parameter can
         be a set of values to be asked from the openid provider.
@@ -476,6 +491,9 @@ class OpenID(object):
             auth_request = consumer.begin(identity_url)
             if ask_for:
                 self.attach_reg_info(auth_request, ask_for)
+            if extension_args:
+                for namespace, key, value in extension_args:
+                    auth_request.addExtensionArg(namespace, key, value)
         except discover.DiscoveryFailure:
             self.signal_error(u'The OpenID was invalid')
             return redirect(self.get_current_url())
