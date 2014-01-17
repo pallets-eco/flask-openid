@@ -34,7 +34,7 @@ How to Use
 To integrate Flask-OpenID into your application you need to create an
 instance of the :class:`OpenID` object first::
 
-    from flask_openid import OpenID
+    from flask.ext.openid import OpenID
     oid = OpenID(app, '/path/to/store')
 
 By default it will use the filesystem as store for information needed by
