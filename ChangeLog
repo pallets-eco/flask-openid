@@ -1,0 +1,19 @@
+1.2 (????-??-??)
+----------------
+
+New
+~~~
+
+- Added support for python 3. [Dennis Glindhart, Patrick Uiterwijk]
+
+- Added support for optional sreg keys. [Shay Erlichmen, Patrick Uiterwijk]
+
+
+Fix
+~~~
+
+- Small typo fix in documentation. [David Vincelli]
+
+- Fix the import name in the documentation. [William Ting, Amanjeev Sethi]
+
+- Fix pickle.loads crashing on non-ASCII chars. [Shay Erlichmen]
