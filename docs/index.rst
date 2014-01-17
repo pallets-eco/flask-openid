@@ -45,7 +45,7 @@ information about that, consult the python-openid documentation.
 The path to the store can also be specified with the
 ``OPENID_FS_STORE_PATH`` configuration variable.
 
-Alternatively the object can be instanciated without the application in
+Alternatively the object can be instantiated without the application in
 which case it can later be registered for an application with the
 :meth:`~OpenID.init_app` method.
 
