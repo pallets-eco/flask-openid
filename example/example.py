@@ -14,6 +14,8 @@ from flask import Flask, render_template, request, g, session, flash, \
      redirect, url_for, abort
 from flask.ext.openid import OpenID
 
+from openid.extensions import pape
+
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -27,7 +29,7 @@ app.config.update(
 )
 
 # setup flask-openid
-oid = OpenID(app, safe_roots=[])
+oid = OpenID(app, safe_roots=[], extension_responses=[pape.Response])
 
 # setup sqlalchemy
 engine = create_engine(app.config['DATABASE_URI'])
@@ -84,8 +86,10 @@ def login():
     if request.method == 'POST':
         openid = request.form.get('openid')
         if openid:
+            pape_req = pape.Request([])
             return oid.try_login(openid, ask_for=['email', 'nickname'],
-                                         ask_for_optional=['fullname'])
+                                         ask_for_optional=['fullname'],
+                                         extensions=[pape_req])
     return render_template('login.html', next=oid.get_next_url(),
                            error=oid.fetch_error())
 
@@ -98,6 +102,9 @@ def create_or_login(resp):
     with a terrible URL which we certainly don't want.
     """
     session['openid'] = resp.identity_url
+    if 'pape' in resp.extensions:
+        pape_resp = resp.extensions['pape']
+        session['auth_time'] = pape_resp.auth_time
     user = User.query.filter_by(openid=resp.identity_url).first()
     if user is not None:
         flash(u'Successfully signed in')
