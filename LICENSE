@@ -29,3 +29,10 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---------------
+
+OpenID® is a trademark (registered in numerous countries) of the OpenID Foundation.
+
+The OpenID logo in docs/_static/flask-openid.png is used under the
+OpenID trademark and service mark license, as defined on http://openid.net/trademark-license/.
