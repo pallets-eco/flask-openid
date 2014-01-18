@@ -149,7 +149,8 @@ class RegLookup(object):
         # Process the OpenID response with the OpenIDResponse class provided
         self.ext = {}
         for extension in extensions:
-            self.ext[extension.__name__] = \
+            ext_name = getattr(extension, 'ns_alias', extension.__name__)
+            self.ext[ext_name] = \
                 extension.fromSuccessResponse(resp)
 
     def get(self, name, default=None):
