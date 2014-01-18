@@ -415,7 +415,6 @@ class OpenID(object):
         for safe_root in self.safe_roots:
             if url.startswith(safe_root):
                 return url
-        print 'Unsafe url: %s' % url
         return None
 
     def get_current_url(self):
