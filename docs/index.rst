@@ -35,7 +35,7 @@ To integrate Flask-OpenID into your application you need to create an
 instance of the :class:`OpenID` object first::
 
     from flask.ext.openid import OpenID
-    oid = OpenID(app, '/path/to/store')
+    oid = OpenID(app, '/path/to/store', safe_roots=[])
 
 By default it will use the filesystem as store for information needed by
 OpenID for the authentication process.  You can alternatively implement
@@ -48,6 +48,12 @@ The path to the store can also be specified with the
 Alternatively the object can be instantiated without the application in
 which case it can later be registered for an application with the
 :meth:`~OpenID.init_app` method.
+
+The list of URL roots that are safe to redirect the user to are passed via
+`safe_roots`. Whenever the url root of the ``'next'`` request argument is not in
+this list, the user will get redirected to the app root. All urls that are local
+to the current app are always regared as trusted. This security mechanism
+can be disabled by  leaving `safe_roots` out, but this is not suggested.
 
 The current logged in user has to memorized somewhere, we will use the
 ``'openid'`` key in the `session`.  This can be implemented in a
@@ -216,6 +222,15 @@ the session and redirect back to where the user was before::
         flash(u'You were signed out')
         return redirect(oid.get_next_url())
 
+Advanced usage
+--------------
+
+Flask-OpenID can also work with any python-openid extension.
+To use this, pass a list of instantiated request openid.extension.Extension
+objects in the `extensions` field of :meth:`~OpenID.try_login`.
+The responses of these extensions are available during the :meth:`after_login`
+function, as entries in resp.extensions.
+
 Full Example
 ------------
 
@@ -224,6 +239,13 @@ github <http://github.com/mitsuhiko/flask-openid>`_.
 
 Changes
 -------
+
+1.2
+```
+
+-   The safe_roots argument and URL security system was added.
+
+-   The OpenID extensions system was added.
 
 1.0
 ```
