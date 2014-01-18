@@ -10,6 +10,8 @@ New
 
 - Added support for optional sreg keys. [Shay Erlichmen, Patrick Uiterwijk]
 
+- Added the option to declare which URL roots are safe to redirect to [Patrick Uiterwijk]
+
 
 Fix
 ~~~

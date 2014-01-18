@@ -27,7 +27,7 @@ app.config.update(
 )
 
 # setup flask-openid
-oid = OpenID(app)
+oid = OpenID(app, safe_roots=[])
 
 # setup sqlalchemy
 engine = create_engine(app.config['DATABASE_URI'])
