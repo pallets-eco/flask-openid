@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -* coding: utf-8 -*-
 """
     flaskext.openid
     ~~~~~~~~~~~~~~~
@@ -327,7 +327,7 @@ class OpenID(object):
     """
 
     def __init__(self, app=None, fs_store_path=None, store_factory=None,
-                 fallback_endpoint=None, extension_responses=[], safe_roots=None):
+                 fallback_endpoint=None, extension_responses=None, safe_roots=None):
         # backwards compatibility support
         if isinstance(app, basestring):
             from warnings import warn
@@ -350,6 +350,8 @@ class OpenID(object):
         self.store_factory = store_factory
         self.after_login_func = None
         self.fallback_endpoint = fallback_endpoint
+        if not extension_responses:
+            extension_responses = []
         self.extension_responses = extension_responses
         if isinstance(safe_roots, basestring):
             self.safe_roots = [safe_roots]
