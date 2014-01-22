@@ -500,7 +500,7 @@ class OpenID(object):
         required, and keys in `ask_for_optional` are marked as optional.
 
         The following strings can be used in the `ask_for` and
-            `ask_for_optional` parameters:
+        `ask_for_optional` parameters:
         ``aim``, ``blog``, ``country``, ``dob`` (date of birth), ``email``,
         ``fullname``, ``gender``, ``icq``, ``image``, ``jabber``, ``language``,
         ``msn``, ``nickname``, ``phone``, ``postcode``, ``skype``,
