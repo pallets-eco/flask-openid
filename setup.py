@@ -27,12 +27,11 @@ if not os.path.exists("./docs/_themes/README"):
     sys.exit(1)
 
 extra = {}
-install_requires = ['Flask>=0.10.1']
 if sys.version_info >= (3,):
-    install_requires.append('python3-openid>=2.0')
+    install_requires = ['Flask>=0.10.1', 'python3-openid>=2.0']
     extra['use_2to3'] = True
 else:
-    install_requires.append('python-openid>=2.0')
+    install_requires = ['Flask>=0.3', 'python-openid>=2.0']
 
 setup(
     name='Flask-OpenID',
