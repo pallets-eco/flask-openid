@@ -515,9 +515,10 @@ class OpenID(object):
             for key in ask_for:
                 if key not in ALL_KEYS:
                     raise ValueError('invalid key %r' % key)
-            for key in ask_for_optional:
-                if key not in ALL_KEYS:
-                    raise ValueError('invalid optional key %r' % key)
+            if ask_for_optional:
+                for key in ask_for_optional:
+                    if key not in ALL_KEYS:
+                        raise ValueError('invalid optional key %r' % key)
         try:
             consumer = Consumer(SessionWrapper(self), self.store_factory())
             auth_request = consumer.begin(identity_url)
