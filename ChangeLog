@@ -1,3 +1,14 @@
+1.2.1 (????-??-??)
+------------------
+
+Fix
+~~~
+
+- Using print() for python 3 compatibility. [Jon Chen]
+
+- Make ask_for_optional optional in debug if ask_for is specified. [Samuel Miller]
+
+
 1.2 (2014-01-22)
 ----------------
 
