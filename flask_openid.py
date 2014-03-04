@@ -114,7 +114,10 @@ class SessionWrapper(object):
     def __getitem__(self, name):
         rv = session[self.name_mapping.get(name, name)]
         if isinstance(rv, dict) and len(rv) == 1 and ' p' in rv:
-            return pickle.loads(rv[' p'].encode('utf-8'))
+            try:
+                return pickle.loads(rv[' p'].encode('utf-8'))
+            except:
+                return pickle.loads(rv[' p'])
         return rv
 
     def __setitem__(self, name, value):
@@ -494,7 +497,7 @@ class OpenID(object):
 
     def try_login(self, identity_url, ask_for=None, ask_for_optional=None, extensions=None):
         """This tries to login with the given identity URL.  This function
-        must be called from the login_handler.  The `ask_for` and 
+        must be called from the login_handler.  The `ask_for` and
         `ask_for_optional`parameter can be a set of values to be asked
         from the openid provider, where keys in `ask_for` are marked as
         required, and keys in `ask_for_optional` are marked as optional.
