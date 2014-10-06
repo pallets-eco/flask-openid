@@ -23,7 +23,7 @@ from sqlalchemy.ext.declarative import declarative_base
 # setup flask
 app = Flask(__name__)
 app.config.update(
-    DATABASE_URI = 'sqlite:////tmp/flask-openid.db',
+    DATABASE_URI = 'sqlite:///flask-openid.db',
     SECRET_KEY = 'development key',
     DEBUG = True
 )
@@ -33,8 +33,8 @@ oid = OpenID(app, safe_roots=[], extension_responses=[pape.Response])
 
 # setup sqlalchemy
 engine = create_engine(app.config['DATABASE_URI'])
-db_session = scoped_session(sessionmaker(autocommit=False,
-                                         autoflush=False,
+db_session = scoped_session(sessionmaker(autocommit=True,
+                                         autoflush=True,
                                          bind=engine))
 Base = declarative_base()
 Base.query = db_session.query_property()
@@ -173,4 +173,5 @@ def logout():
 
 
 if __name__ == '__main__':
+    init_db()
     app.run()
