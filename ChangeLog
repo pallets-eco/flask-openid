@@ -5,6 +5,7 @@ New
 ~~~
 
 - Make it easier to start the example by removing init_db. [Patrick Uiterwijk]
+- Make OpenID errors more descriptive. [Patrick Uiterwijk]
 
 
 1.2.2 (2014-04-26)
