@@ -1,4 +1,13 @@
-1.2.2 (2014-10-??)
+1.2.3 (2014-10-??)
+------------------
+
+New
+~~~
+
+- Added shebang to example to make it easier to run. [Patrick Uiterwijk]
+
+
+1.2.2 (2014-10-07)
 ------------------
 
 New
