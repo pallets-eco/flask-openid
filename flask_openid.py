@@ -17,6 +17,7 @@ import pickle
 import tempfile
 from functools import wraps
 from datetime import date
+import sys
 
 from flask import request, session, redirect, current_app, url_for
 from werkzeug import url_quote
@@ -101,6 +102,12 @@ def softint(x):
         return int(x)
     except (ValueError, TypeError):
         return None
+
+def isstring(x):
+    if sys.version_info.major >= 3:
+        return isinstance(x, str)
+    else:
+        return isinstance(x, basestring)
 
 
 class SessionWrapper(object):
@@ -333,7 +340,7 @@ class OpenID(object):
     def __init__(self, app=None, fs_store_path=None, store_factory=None,
                  fallback_endpoint=None, extension_responses=None, safe_roots=None):
         # backwards compatibility support
-        if isinstance(app, basestring):
+        if isstring(app):
             from warnings import warn
             warn(DeprecationWarning('OpenID constructor expects application '
                                     'as first argument now.  If you want to '
@@ -357,7 +364,7 @@ class OpenID(object):
         if not extension_responses:
             extension_responses = []
         self.extension_responses = extension_responses
-        if isinstance(safe_roots, basestring):
+        if isstring(safe_roots):
             self.safe_roots = [safe_roots]
         else:
             self.safe_roots = safe_roots

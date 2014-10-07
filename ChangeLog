@@ -11,6 +11,7 @@ Fix
 ~~~
 
 - First try to utf8 encode, but skip for python3. [evgen]
+- Make the checks for string type work. [Patrick Uiterwijk, Sergey]
 
 
 1.2.1 (2014-01-26)
