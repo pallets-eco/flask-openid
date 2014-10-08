@@ -27,7 +27,7 @@ if not os.path.exists("./docs/_themes/README"):
     sys.exit(1)
 
 extra = {}
-if sys.version_info >= (3,):
+if sys.version_info[0] >= 3:
     install_requires = ['Flask>=0.10.1', 'python3-openid>=2.0']
     extra['use_2to3'] = True
 else:
