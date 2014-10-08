@@ -1,10 +1,15 @@
-1.2.3 (2014-10-??)
+1.2.3 (2014-10-08)
 ------------------
 
 New
 ~~~
 
 - Added shebang to example to make it easier to run. [Patrick Uiterwijk]
+
+Fix
+~~~
+
+- Fix compatibility issue with python<2.7 introduced in 1.2.2. [Patrick Uiterwijk]
 
 
 1.2.2 (2014-10-07)

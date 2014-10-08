@@ -104,7 +104,7 @@ def softint(x):
         return None
 
 def isstring(x):
-    if sys.version_info.major >= 3:
+    if sys.version_info[0] >= 3:
         return isinstance(x, str)
     else:
         return isinstance(x, basestring)
