@@ -35,7 +35,7 @@ else:
 
 setup(
     name='Flask-OpenID',
-    version='1.2.3',
+    version='1.2.4',
     url='http://github.com/mitsuhiko/flask-openid/',
     license='BSD',
     author='Armin Ronacher, Patrick Uiterwijk',
