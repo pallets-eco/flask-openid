@@ -335,10 +335,13 @@ class OpenID(object):
                               default the user is redirected back to the
                               application's index in that case.
     :param extension_responses: a list of OpenID Extensions Response class.
+    :param safe_roots: a list of trust roots to support returning to
+    :param url_root_as_trust_root: whether to use the url_root as trust_root
     """
 
     def __init__(self, app=None, fs_store_path=None, store_factory=None,
-                 fallback_endpoint=None, extension_responses=None, safe_roots=None):
+                 fallback_endpoint=None, extension_responses=None,
+                 safe_roots=None, url_root_as_trust_root=False):
         # backwards compatibility support
         if isstring(app):
             from warnings import warn
@@ -368,6 +371,7 @@ class OpenID(object):
             self.safe_roots = [safe_roots]
         else:
             self.safe_roots = safe_roots
+        self.url_root_as_trust_root = url_root_as_trust_root
 
     def init_app(self, app):
         """This callback can be used to initialize an application for the
@@ -549,6 +553,9 @@ class OpenID(object):
         except discover.DiscoveryFailure:
             self.signal_error(u'The OpenID was invalid')
             return redirect(self.get_current_url())
-        trust_root = request.host_url
-        return redirect(auth_request.redirectURL(request.host_url,
+        if self.url_root_as_trust_root:
+            trust_root = request.url_root
+        else:
+            trust_root = request.host_url
+        return redirect(auth_request.redirectURL(trust_root,
                                                  self.get_success_url()))
