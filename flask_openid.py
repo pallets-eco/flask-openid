@@ -506,8 +506,8 @@ class OpenID(object):
                 self.signal_error(u'OpenID authentication failure. Mesage: %s'
                     % openid_response.message)
             elif openid_response.status == SETUP_NEEDED:
-                # We should never get here since we do checkid_setup always
-                self.signal_error(u'OpenID setup was needed??')
+                # Unless immediate=True, we should never get here
+                self.signal_error(u'OpenID setup was needed')
             else:
                 # We should also never get here, as this should be exhaustive
                 self.signal_error(u'OpenID authentication weird state: %s' %
@@ -515,7 +515,8 @@ class OpenID(object):
             return redirect(self.get_current_url())
         return decorated
 
-    def try_login(self, identity_url, ask_for=None, ask_for_optional=None, extensions=None):
+    def try_login(self, identity_url, ask_for=None, ask_for_optional=None,
+                  extensions=None, immediate=False):
         """This tries to login with the given identity URL.  This function
         must be called from the login_handler.  The `ask_for` and
         `ask_for_optional`parameter can be a set of values to be asked
@@ -533,6 +534,13 @@ class OpenID(object):
         that should be passed on with the request. If you use this, please make
         sure to pass the Response classes of these extensions when initializing
         OpenID.
+
+        `immediate` can be used to indicate this request should be a so-called
+        checkid_immediate request, resulting in the provider not showing any UI.
+        Note that this adds a new possible response: SetupNeeded, which is the
+        server saying it doesn't have enough information yet to authorized or
+        reject the authentication (probably, the user needs to sign in or
+        approve the trust root).
         """
         if ask_for and __debug__:
             for key in ask_for:
@@ -558,4 +566,5 @@ class OpenID(object):
         else:
             trust_root = request.host_url
         return redirect(auth_request.redirectURL(trust_root,
-                                                 self.get_success_url()))
+                                                 self.get_success_url(),
+                                                 immediate=immediate))
