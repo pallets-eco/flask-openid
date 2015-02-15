@@ -18,6 +18,7 @@ import tempfile
 from functools import wraps
 from datetime import date
 import sys
+import base64
 
 from flask import request, session, redirect, current_app, url_for
 from werkzeug import url_quote
@@ -123,14 +124,15 @@ class SessionWrapper(object):
         rv = session[self.name_mapping.get(name, name)]
         if isinstance(rv, dict) and len(rv) == 1 and ' p' in rv:
             try:
-                return pickle.loads(rv[' p'].encode('utf-8'))
+                return pickle.loads(base64.b64decode(rv[' p'].encode('utf-8')))
             except:
                 return pickle.loads(rv[' p'])
         return rv
 
     def __setitem__(self, name, value):
         if not getattr(current_app.session_interface, 'pickle_based', True):
-            value = {' p': pickle.dumps(value, 0)}
+            b64 = base64.b64encode(pickle.dumps(value, 0))
+            value = {' p': b64.decode('utf-8')}
         session[self.name_mapping.get(name, name)] = value
 
     def __delitem__(self, name):
