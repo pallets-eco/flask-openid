@@ -20,7 +20,7 @@ from datetime import date
 import sys
 
 from flask import request, session, redirect, current_app, url_for
-from werkzeug import url_quote
+from werkzeug.urls import url_quote
 
 from openid.store.filestore import FileOpenIDStore
 from openid.extensions import ax
