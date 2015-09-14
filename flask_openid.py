@@ -104,6 +104,7 @@ def softint(x):
     except (ValueError, TypeError):
         return None
 
+
 def isstring(x):
     if sys.version_info[0] >= 3:
         return isinstance(x, str)
@@ -393,7 +394,7 @@ class OpenID(object):
             self.init_app(app)
             from warnings import warn
             warn(DeprecationWarning('init_app not called for this '
-                'application.  This is deprecated functionality'))
+                 'application.  This is deprecated functionality'))
 
         path = app.config['OPENID_FS_STORE_PATH'] or self.fs_store_path
         if path is None:
@@ -420,7 +421,8 @@ class OpenID(object):
         return (
             self.check_safe_root(request.values.get('next')) or
             self.check_safe_root(request.referrer) or
-            (self.fallback_endpoint and self.check_safe_root(url_for(self.fallback_endpoint))) or
+            (self.fallback_endpoint and
+             self.check_safe_root(url_for(self.fallback_endpoint))) or
             request.url_root
         )
 
@@ -457,7 +459,8 @@ class OpenID(object):
         optional_keys = set(optional_keys or [])
         sreg_keys = list(SREG_KEYS & keys)
         sreg_optional_keys = list(SREG_KEYS & optional_keys)
-        auth_request.addExtension(SRegRequest(required=sreg_keys, optional=sreg_optional_keys))
+        auth_request.addExtension(SRegRequest(required=sreg_keys,
+                                  optional=sreg_optional_keys))
         ax_req = ax.FetchRequest()
         for key in (keys | optional_keys):
             for uri in AX_MAPPING.get(key, ()):
@@ -506,14 +509,14 @@ class OpenID(object):
                 self.signal_error(u'The request was cancelled')
             elif openid_response.status == FAILURE:
                 self.signal_error(u'OpenID authentication failure. Mesage: %s'
-                    % openid_response.message)
+                                  % openid_response.message)
             elif openid_response.status == SETUP_NEEDED:
                 # Unless immediate=True, we should never get here
                 self.signal_error(u'OpenID setup was needed')
             else:
                 # We should also never get here, as this should be exhaustive
                 self.signal_error(u'OpenID authentication weird state: %s' %
-                    openid_response.status)
+                                  openid_response.status)
             return redirect(self.get_current_url())
         return decorated
 
@@ -538,7 +541,8 @@ class OpenID(object):
         OpenID.
 
         `immediate` can be used to indicate this request should be a so-called
-        checkid_immediate request, resulting in the provider not showing any UI.
+        checkid_immediate request, resulting in the provider not showing any
+        UI.
         Note that this adds a new possible response: SetupNeeded, which is the
         server saying it doesn't have enough information yet to authorized or
         reject the authentication (probably, the user needs to sign in or
