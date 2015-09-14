@@ -55,7 +55,7 @@ this list, the user will get redirected to the app root. All urls that are local
 to the current app are always regared as trusted. This security mechanism
 can be disabled by  leaving `safe_roots` out, but this is not suggested.
 
-The current logged in user has to memorized somewhere, we will use the
+The current logged in user has to be memorized somewhere, we will use the
 ``'openid'`` key in the `session`.  This can be implemented in a
 `before_request` function::
 
