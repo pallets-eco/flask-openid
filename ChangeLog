@@ -7,6 +7,7 @@ New
 - Added support for immediate mode requests. [Patrick Uiterwijk]
 - Fixed grammar error in docs. [Yuval Langer]
 - Fixed import path to url_quote [Bluevalor]
+- Base64 encoding and decoding internal data. [Patrick Steele]
 
 
 1.2.4 (2014-10-24)
