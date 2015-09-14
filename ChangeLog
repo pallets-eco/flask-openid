@@ -1,4 +1,4 @@
-1.2.5 (2015-09-??)
+1.2.5 (2015-09-14)
 ------------------
 
 New
@@ -6,7 +6,7 @@ New
 
 - Added support for immediate mode requests. [Patrick Uiterwijk]
 - Fixed grammar error in docs. [Yuval Langer]
-- Fixed import path to url_quote [Bluevalor]
+- Fixed import path to url_quote. [Bluevalor]
 - Base64 encoding and decoding internal data. [Patrick Steele]
 
 
