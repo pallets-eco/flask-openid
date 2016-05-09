@@ -34,7 +34,7 @@ oid = OpenID(app, safe_roots=[], extension_responses=[pape.Response])
 
 # setup sqlalchemy
 engine = create_engine(app.config['DATABASE_URI'])
-db_session = scoped_session(sessionmaker(autocommit=True,
+db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=True,
                                          bind=engine))
 Base = declarative_base()
