@@ -30,6 +30,14 @@ from openid.consumer.consumer import Consumer, SUCCESS, CANCEL, FAILURE, \
     SETUP_NEEDED
 from openid.consumer import discover
 
+# more python3 compatibility
+import sys
+if (sys.version_info > (3, 0)):
+    str = str
+    unicode = str
+    bytes = bytes
+    basestring = (str,bytes)
+
 # python-openid is a really stupid library in that regard, we have
 # to disable logging by monkey patching.  We still call the original
 # implementation if we are in debug mode though.
