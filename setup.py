@@ -26,10 +26,6 @@ if not os.path.exists("./docs/_themes/README"):
         print('You seem to be using a release. Please use the release tarball from PyPI instead of the archive from GitHub')
     sys.exit(1)
 
-extra = {}
-if sys.version_info[0] >= 3:
-    extra['use_2to3'] = True
-
 setup(
     name='Flask-OpenID',
     version='1.2.5',
@@ -58,5 +54,5 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
-    **extra
+    use_2to3=sys.version_info[0] >= 3
 )
