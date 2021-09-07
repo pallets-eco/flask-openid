@@ -26,10 +26,8 @@ if not os.path.exists("./docs/_themes/README"):
         print('You seem to be using a release. Please use the release tarball from PyPI instead of the archive from GitHub')
     sys.exit(1)
 
-extra = {}
 if sys.version_info[0] >= 3:
     install_requires = ['Flask>=0.10.1', 'python3-openid>=2.0']
-    extra['use_2to3'] = True
 else:
     install_requires = ['Flask>=0.3', 'python-openid>=2.0']
 
@@ -55,6 +53,5 @@ setup(
         'Programming Language :: Python',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Python Modules'
-    ],
-    **extra
+    ]
 )
