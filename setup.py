@@ -28,7 +28,7 @@ if not os.path.exists("./docs/_themes/README"):
 
 setup(
     name='Flask-OpenID',
-    version='1.2.6',
+    version='1.3.0',
     url='http://github.com/mitsuhiko/flask-openid/',
     license='BSD',
     author='Armin Ronacher, Patrick Uiterwijk, Jarek Potiuk, Jason R. Coombs, Emmanuel Bavoux',
