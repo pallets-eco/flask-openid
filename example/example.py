@@ -13,7 +13,7 @@
 """
 from flask import Flask, render_template, request, g, session, flash, \
      redirect, url_for, abort
-from flask.ext.openid import OpenID
+from flask_openid import OpenID
 
 from openid.extensions import pape
 
