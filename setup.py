@@ -31,7 +31,7 @@ setup(
     version='1.2.6',
     url='http://github.com/mitsuhiko/flask-openid/',
     license='BSD',
-    author='Armin Ronacher, Patrick Uiterwijk, Jarek Potiuk, Jason R Coombs, Emmanuel Bavoux',
+    author='Armin Ronacher, Patrick Uiterwijk, Jarek Potiuk, Jason R. Coombs, Emmanuel Bavoux',
     author_email='armin.ronacher@active-4.com, puiterwijk@redhat.com, jarek@potiuk.com, '
                  'jaraco@jaraco.com, emmanuel.bavoux@free2move.com',
     description='OpenID support for Flask',
