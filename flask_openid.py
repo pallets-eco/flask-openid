@@ -17,7 +17,6 @@ import pickle
 import tempfile
 from functools import wraps
 from datetime import date
-import sys
 import base64
 
 from flask import request, session, redirect, current_app, url_for
@@ -106,10 +105,7 @@ def softint(x):
 
 
 def isstring(x):
-    if sys.version_info[0] >= 3:
-        return isinstance(x, str)
-    else:
-        return isinstance(x, str)
+    return isinstance(x, str)
 
 
 class SessionWrapper(object):
