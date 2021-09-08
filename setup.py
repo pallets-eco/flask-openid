@@ -28,14 +28,16 @@ if not os.path.exists("./docs/_themes/README"):
 
 setup(
     name='Flask-OpenID',
-    version='1.2.5',
+    version='1.2.6',
     url='http://github.com/mitsuhiko/flask-openid/',
     license='BSD',
-    author='Armin Ronacher, Patrick Uiterwijk',
-    author_email='armin.ronacher@active-4.com, puiterwijk@redhat.com',
+    author='Armin Ronacher, Patrick Uiterwijk, Jarek Potiuk, Jason R Coombs, Emmanuel Bavoux',
+    author_email='armin.ronacher@active-4.com, puiterwijk@redhat.com, jarek@potiuk.com, '
+                 'jaraco@jaraco.com, emmanuel.bavoux@free2move.com',
     description='OpenID support for Flask',
     long_description=__doc__,
     py_modules=['flask_openid'],
+    long_description_content_type="text/x-rst",
     zip_safe=False,
     platforms='any',
     install_requires=['Flask>=0.10.1', 'python3-openid>=2.0'],
