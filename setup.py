@@ -26,11 +26,6 @@ if not os.path.exists("./docs/_themes/README"):
         print('You seem to be using a release. Please use the release tarball from PyPI instead of the archive from GitHub')
     sys.exit(1)
 
-if sys.version_info[0] >= 3:
-    install_requires = ['Flask>=0.10.1', 'python3-openid>=2.0']
-else:
-    install_requires = ['Flask>=0.3', 'python-openid>=2.0']
-
 setup(
     name='Flask-OpenID',
     version='1.2.5',
@@ -43,7 +38,7 @@ setup(
     py_modules=['flask_openid'],
     zip_safe=False,
     platforms='any',
-    install_requires=install_requires,
+    install_requires=['Flask>=0.10.1', 'python3-openid>=2.0'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
@@ -51,7 +46,10 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3 :: Only',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Python Modules'
-    ]
+    ],
+    python_requires=">=3.0",
 )

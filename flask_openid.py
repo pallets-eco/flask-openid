@@ -10,7 +10,7 @@
     :copyright: (c) 2010 by Armin Ronacher.
     :license: BSD, see LICENSE for more details.
 """
-from __future__ import absolute_import
+
 
 import os
 import pickle
@@ -109,7 +109,7 @@ def isstring(x):
     if sys.version_info[0] >= 3:
         return isinstance(x, str)
     else:
-        return isinstance(x, basestring)
+        return isinstance(x, str)
 
 
 class SessionWrapper(object):
@@ -210,8 +210,8 @@ class OpenIDResponse(object):
         self.fullname = lookup.get_combined('fullname', FULL_NAME_URIS)
         if self.fullname is None:
             first = lookup.get_uri('http://axschema.org/namePerson/first')
-            last = lookup.get_uri(u'http://axschema.org/namePerson/last')
-            self.fullname = u' '.join(x for x in [first, last] if x) or None
+            last = lookup.get_uri('http://axschema.org/namePerson/last')
+            self.fullname = ' '.join(x for x in [first, last] if x) or None
 
         #: desired nickname of the user
         self.nickname = lookup.get('nickname')
@@ -496,7 +496,7 @@ class OpenID(object):
         """
         @wraps(f)
         def decorated(*args, **kwargs):
-            if request.args.get('openid_complete') != u'yes':
+            if request.args.get('openid_complete') != 'yes':
                 return f(*args, **kwargs)
             consumer = Consumer(SessionWrapper(self), self.store_factory())
             args = request.args.to_dict()
@@ -506,16 +506,16 @@ class OpenID(object):
                 return self.after_login_func(OpenIDResponse(
                     openid_response, self.extension_responses))
             elif openid_response.status == CANCEL:
-                self.signal_error(u'The request was cancelled')
+                self.signal_error('The request was cancelled')
             elif openid_response.status == FAILURE:
-                self.signal_error(u'OpenID authentication failure. Mesage: %s'
+                self.signal_error('OpenID authentication failure. Mesage: %s'
                                   % openid_response.message)
             elif openid_response.status == SETUP_NEEDED:
                 # Unless immediate=True, we should never get here
-                self.signal_error(u'OpenID setup was needed')
+                self.signal_error('OpenID setup was needed')
             else:
                 # We should also never get here, as this should be exhaustive
-                self.signal_error(u'OpenID authentication weird state: %s' %
+                self.signal_error('OpenID authentication weird state: %s' %
                                   openid_response.status)
             return redirect(self.get_current_url())
         return decorated
@@ -565,7 +565,7 @@ class OpenID(object):
                 for extension in extensions:
                     auth_request.addExtension(extension)
         except discover.DiscoveryFailure:
-            self.signal_error(u'The OpenID was invalid')
+            self.signal_error('The OpenID was invalid')
             return redirect(self.get_current_url())
         if self.url_root_as_trust_root:
             trust_root = request.url_root
