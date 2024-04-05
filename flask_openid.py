@@ -20,7 +20,7 @@ from datetime import date
 import base64
 
 from flask import request, session, redirect, current_app, url_for
-from werkzeug.urls import url_quote
+from urllib.parse import quote
 
 from openid.store.filestore import FileOpenIDStore
 from openid.extensions import ax
@@ -437,7 +437,7 @@ class OpenID(object):
 
     def get_current_url(self):
         """the current URL + next."""
-        return request.base_url + '?next=' + url_quote(self.get_next_url())
+        return request.base_url + '?next=' + quote(self.get_next_url())
 
     def get_success_url(self):
         """Return the internal success URL.
