@@ -6,9 +6,17 @@ example for more information.
 
 Documentation: http://packages.python.org/Flask-OpenID/
 
+Note that this library is for a very old and outdated version of OpenID.
+Almost no-one uses this Open ID protocol, the OpenID Connect protocol is
+the current standard.
 
 CHANGELOG
 ---------
+
+* 1.3.1 Version: 26, May 2024
+
+Import quote from urllib.
+
 
 * 1.3.0 Version: 8, September 2021
 

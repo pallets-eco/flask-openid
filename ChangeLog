@@ -1,3 +1,18 @@
+1.3.1 (2024-05-26)
+------------------
+
+Import quote from urllib.
+
+Note that this library is for a very old and outdated version of OpenID.
+Almost no-one uses this Open ID protocol, the OpenID Connect protocol is
+the current standard.
+
+
+1.3.0 (2021-09-08)
+------------------
+
+Python 3-only compatible version with 2to3 removed to satisfy setuptools removal of 2to3 configuration option of setup.py
+
 1.2.5 (2015-09-14)
 ------------------
 
